@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <!-- iPhone 15 : plein écran, zones sûres (îlot dynamique, barre d'accueil) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <!-- "default" : barre d'état à texte noir, lisible sur fond beige (black-translucent donnerait du texte blanc) -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Calcul mental">
+  <meta name="theme-color" content="#F2EADB">
+  <meta name="format-detection" content="telephone=no">
+  <title>Calcul mental</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="./icon-192.png">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div id="app"></div>
+
+  <!-- Écran d'ouverture : retiré par js/app.js après 2,79 s -->
+  <div id="splash" aria-hidden="true"><div class="logo"><span class="a">calcul</span><span class="b">mental</span></div></div>
+
+  <!-- Scripts classiques (pas de modules) : l'ordre compte. Chemins relatifs pour GitHub Pages. -->
+  <script src="./app.js"></script>
+</body>
+</html>

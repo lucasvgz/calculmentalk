@@ -1,0 +1,17 @@
+{
+  "name": "Calcul mental · cases conseil",
+  "short_name": "Calcul mental",
+  "description": "Entraînement au calcul mental pour les cases de conseil en stratégie.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F2EADB",
+  "theme_color": "#F2EADB",
+  "lang": "fr",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

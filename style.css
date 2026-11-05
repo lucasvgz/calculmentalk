@@ -1,0 +1,319 @@
+/* style.css — thème beige / noir / rouge #A60039, conçu pour iPhone 15 en portrait (393 × 852 pt), tactile uniquement. */
+
+:root {
+  --bg: #F2EADB;          /* fond beige */
+  --card: #FAF5EA;        /* beige clair : cartes et boutons */
+  --card-2: #E8DCC6;      /* beige foncé : puces, état pressé */
+  --line: #D6C8AC;
+  --txt: #15110E;         /* noir chaud */
+  --muted: #6B5F53;
+  --accent: #A60039;      /* rouge */
+  --accent-bg: #F3DDD9;   /* rouge très pâle */
+  --on-accent: #FAF5EA;   /* texte sur fond rouge */
+  --ok: #2E7D4F;
+  --ok-bg: #DCEBD6;
+  --ko: #A60039;
+  --ko-bg: #F5D9DE;
+  --gutter: 16px;
+  --largeur: 520px;       /* largeur max du contenu (centré sur grands écrans) */
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--txt);
+  font: 16px/1.4 -apple-system, system-ui, "SF Pro Text", sans-serif;
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  border: 0;
+  background: none;
+  padding: 0;
+  margin: 0;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-appearance: none;
+  appearance: none;
+  touch-action: manipulation;
+}
+
+/* ---------- Écran d'ouverture : logo rouge sur fond beige ---------- */
+
+#splash {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--bg);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity .35s ease;
+}
+#splash.fin { opacity: 0; pointer-events: none; }
+#splash .logo {
+  font-size: 46px;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  white-space: nowrap;
+}
+#splash .logo .a { font-weight: 300; }
+#splash .logo .b { font-weight: 800; }
+
+/* ---------- Structure : zone sûre en haut, barre d'onglets en bas ---------- */
+
+#app {
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding-top: env(safe-area-inset-top);
+  max-width: var(--largeur);
+  margin: 0 auto;
+}
+
+.page {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 8px max(var(--gutter), env(safe-area-inset-right)) 24px max(var(--gutter), env(safe-area-inset-left));
+}
+
+.nav {
+  flex: none;
+  display: flex;
+  background: var(--card);
+  border-top: 1px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+.nav button {
+  flex: 1;
+  height: 56px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.nav button.actif { color: var(--accent); }
+
+h1 { font-size: 30px; margin: 12px 0 4px; text-align: center; color: var(--accent); letter-spacing: -0.02em; }
+h2 { font-size: 20px; margin: 24px 0 8px; text-align: center; }
+.sous-titre { color: var(--muted); margin: 0 0 16px; text-align: center; }
+
+/* ---------- Écran "S'entraîner" ---------- */
+
+.niveaux {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 8px 0 16px;
+}
+.niveaux button {
+  height: 48px;
+  border-radius: 12px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  font-weight: 600;
+  font-size: 16px;
+}
+.niveaux button.actif { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+
+.bloc-titre { color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: .08em; margin: 22px 0 8px; text-align: center; }
+
+.carte {
+  display: block;
+  width: 100%;
+  text-align: center;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  min-height: 72px;
+}
+.carte:active { background: var(--card-2); }
+.carte .ligne { display: flex; justify-content: center; align-items: baseline; gap: 10px; }
+.carte .nom { font-size: 18px; font-weight: 700; }
+.carte .taux { font-size: 14px; font-weight: 700; color: var(--accent); white-space: nowrap; }
+.carte .taux:empty { display: none; }
+.carte .ex { color: var(--muted); margin-top: 2px; font-size: 15px; }
+.carte.mix { border: 2px solid var(--accent); background: var(--accent-bg); }
+.carte.mix .nom { color: var(--accent); }
+
+/* ---------- Écran de question ---------- */
+
+.q {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.q-haut {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px max(var(--gutter), env(safe-area-inset-right)) 4px max(var(--gutter), env(safe-area-inset-left));
+}
+.btn-fin {
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  font-weight: 600;
+  font-size: 15px;
+}
+.chrono {
+  min-width: 84px;
+  text-align: right;
+  font-size: 24px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+.chrono.fige { color: var(--muted); }
+
+.infos {
+  flex: none;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 4px var(--gutter) 0;
+}
+.puce { background: var(--card-2); border-radius: 999px; padding: 4px 10px; font-size: 14px; font-weight: 600; color: var(--txt); }
+
+/* Zone centrale : l'énoncé est centré (gauche-droite et haut-bas) ;
+   en dessous, une zone de hauteur fixe accueille la correction (la question ne bouge donc pas). */
+.q-main {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 1fr 168px;
+  padding: 0 max(var(--gutter), env(safe-area-inset-right)) 0 max(var(--gutter), env(safe-area-inset-left));
+}
+.zone-enonce { display: flex; align-items: center; justify-content: center; }
+.enonce { font-size: 30px; line-height: 1.25; font-weight: 800; text-align: center; letter-spacing: -0.01em; }
+.zone-retour { overflow-y: auto; -webkit-overflow-scrolling: touch; padding-top: 4px; }
+
+.retour { border-radius: 14px; padding: 10px 14px; font-size: 15px; text-align: center; }
+.retour.ok { background: var(--ok-bg); border: 1px solid var(--ok); }
+.retour.ko { background: var(--ko-bg); border: 1px solid var(--ko); }
+.retour .verdict { font-weight: 800; font-size: 18px; margin-bottom: 4px; }
+.retour.ok .verdict { color: var(--ok); }
+.retour.ko .verdict { color: var(--ko); }
+.retour .astuce { color: var(--muted); margin-top: 6px; }
+
+.reponses {
+  flex: none;
+  display: grid;
+  gap: 10px;
+  padding: 8px max(var(--gutter), env(safe-area-inset-right)) 0 max(var(--gutter), env(safe-area-inset-left));
+}
+.rep {
+  min-height: 58px;
+  border-radius: 14px;
+  background: var(--card);
+  border: 2px solid var(--line);
+  font-size: 22px;
+  font-weight: 700;
+  display: grid;
+  grid-template-columns: 32px 1fr 32px;
+  align-items: center;
+  text-align: center;
+  padding: 0 8px;
+}
+.rep .icone { font-size: 22px; font-weight: 800; }
+.rep.ok { background: var(--ok-bg); border-color: var(--ok); color: #17482c; }
+.rep.ko { background: var(--ko-bg); border-color: var(--ko); color: #6e0026; }
+.rep.neutre { opacity: .5; }
+.rep:active { background: var(--card-2); }
+
+.q-pied {
+  flex: none;
+  padding: 12px max(var(--gutter), env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) max(var(--gutter), env(safe-area-inset-left));
+}
+.btn-suivant {
+  width: 100%;
+  height: 56px;
+  border-radius: 14px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 20px;
+  font-weight: 700;
+}
+.btn-suivant.cache { visibility: hidden; }
+
+/* ---------- Récapitulatif et stats ---------- */
+
+.chiffres { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 12px 0; }
+.chiffre { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 8px; text-align: center; }
+.chiffre b { display: block; font-size: 26px; color: var(--accent); }
+.chiffre span { color: var(--muted); font-size: 14px; }
+
+.liste-erreur { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; margin-bottom: 8px; }
+.liste-erreur .q-txt { font-weight: 700; }
+.liste-erreur .bonne { color: var(--ok); }
+.liste-erreur .faux { color: var(--ko); }
+.liste-erreur .temps { float: right; color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.btn-large {
+  display: block;
+  width: 100%;
+  min-height: 56px;
+  border-radius: 14px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 18px;
+  font-weight: 700;
+  margin: 12px 0;
+  padding: 8px 16px;
+}
+.btn-large.secondaire { background: var(--card); color: var(--txt); border: 1px solid var(--line); }
+.btn-large.danger { background: var(--ko-bg); color: var(--ko); border: 1px solid var(--ko); }
+.btn-large:disabled { opacity: .45; }
+
+table.stats { width: 100%; border-collapse: collapse; }
+table.stats th { color: var(--muted); font-size: 13px; font-weight: 600; text-align: center; padding: 4px 2px; }
+table.stats th:first-child, table.stats td:first-child { text-align: left; }
+table.stats td { padding: 10px 2px; border-top: 1px solid var(--line); text-align: center; font-size: 16px; font-weight: 600; }
+table.stats td small { display: block; color: var(--muted); font-size: 12px; font-weight: 400; }
+table.stats td:first-child { font-size: 16px; padding-right: 6px; }
+
+.confirmation { background: var(--ko-bg); border: 1px solid var(--ko); border-radius: 14px; padding: 12px 14px; margin: 12px 0; text-align: center; }
+.confirmation .rang { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+.confirmation .rang .btn-large { margin: 0; }
+
+.vide { color: var(--muted); text-align: center; padding: 24px 0; }
+
+/* ---------- Paysage : utilisable (le contenu défile), sans être optimisé ---------- */
+@media (max-height: 520px) {
+  .q { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .q-main { flex: none; display: block; }
+  .zone-enonce { padding: 12px 0; }
+  .zone-retour { overflow: visible; min-height: 0; }
+  .reponses { grid-template-columns: 1fr 1fr; }
+  .q-pied { position: sticky; bottom: 0; background: var(--bg); }
+}
+
+/* Petits écrans (iPhone SE…) : un peu plus compact */
+@media (max-height: 700px) and (min-height: 521px) {
+  .q-main { grid-template-rows: 1fr 140px; }
+  .enonce { font-size: 26px; }
+  .rep { min-height: 52px; }
+}
