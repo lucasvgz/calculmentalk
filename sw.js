@@ -1,6 +1,6 @@
 /* sw.js — service worker : met tous les fichiers en cache pour le mode hors ligne.
  * ⚠ À CHAQUE MISE À JOUR de l'appli : incrémente CACHE_VERSION, sinon le téléphone garde l'ancienne version. */
-var CACHE_VERSION = 'v3';
+var CACHE_VERSION = 'v4';
 var CACHE_NAME = 'calcul-mental-' + CACHE_VERSION;
 
 var FICHIERS = ['./', './index.html', './manifest.json', './style.css', './app.js', './apple-touch-icon.png', './icon-192.png', './icon-512.png'];

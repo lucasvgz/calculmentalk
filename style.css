@@ -317,3 +317,44 @@ table.stats td:first-child { font-size: 16px; padding-right: 6px; }
   .enonce { font-size: 26px; }
   .rep { min-height: 52px; }
 }
+
+
+/* ---------- Choix du profil ---------- */
+.ecran-profil {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  padding: 0 var(--gutter) 40px;
+}
+.logo-profil { font-size: 34px; letter-spacing: -0.03em; line-height: 1; color: var(--accent); white-space: nowrap; }
+.logo-profil .a { font-weight: 300; }
+.logo-profil .b { font-weight: 800; }
+.profils { display: flex; justify-content: center; gap: 20px; width: 100%; }
+.profil { display: flex; flex-direction: column; align-items: center; gap: 14px; flex: 1; max-width: 190px; }
+.profil .avatar {
+  display: block;
+  width: min(40vw, 180px);
+  height: min(40vw, 180px);
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--card);
+  border: 3px solid var(--line);
+  transition: transform .12s ease, border-color .12s ease;
+}
+.profil:active .avatar { transform: scale(.95); border-color: var(--accent); background: var(--accent-bg); }
+.avatar svg, .mini svg { display: block; width: 100%; height: 100%; }
+.profil-nom { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; color: var(--accent); }
+
+/* Pastille du profil actif (accueil et stats) */
+.chip-profil {
+  display: flex; align-items: center; gap: 8px;
+  margin: 4px auto 0; padding: 4px 12px 4px 4px;
+  border-radius: 999px; background: var(--card); border: 1px solid var(--line);
+}
+.chip-profil .mini { width: 32px; height: 32px; border-radius: 50%; overflow: hidden; background: var(--card-2); display: block; }
+.chip-nom { font-weight: 800; color: var(--accent); }
+.chip-chg { color: var(--muted); font-size: 13px; }

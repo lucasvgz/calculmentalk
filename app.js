@@ -1715,7 +1715,12 @@ window.MM = window.MM || {};
 (function (MM) {
   'use strict';
 
-  var CLE = 'mm-consulting-v1';
+  // Deux profils, deux mémoires séparées. Lucas garde la clé historique (ses stats existantes sont conservées).
+  var PROFILS = {
+    lucas: { nom: 'Lucas', cle: 'mm-consulting-v1' },
+    elena: { nom: 'Elena', cle: 'mm-consulting-v1-elena' }
+  };
+  var profilActif = 'lucas';
   var MAX_ERREURS = 50;
   var MAX_LENTES = 15;
 
@@ -1734,7 +1739,7 @@ window.MM = window.MM || {};
 
   function lire() {
     try {
-      var brut = window.localStorage.getItem(CLE);
+      var brut = window.localStorage.getItem(PROFILS[profilActif].cle);
       if (!brut) return vide();
       var data = JSON.parse(brut);
       return (data && data.version === 1) ? data : vide();
@@ -1745,7 +1750,7 @@ window.MM = window.MM || {};
 
   function ecrire() {
     try {
-      window.localStorage.setItem(CLE, JSON.stringify(etat));
+      window.localStorage.setItem(PROFILS[profilActif].cle, JSON.stringify(etat));
     } catch (e) { /* stockage indisponible : on continue en mémoire */ }
   }
 
@@ -1756,6 +1761,16 @@ window.MM = window.MM || {};
   }
 
   MM.storage = {
+    // Profil actif : change de jeu de données (la copie en mémoire est rechargée).
+    profils: PROFILS,
+    profil: function () { return profilActif; },
+    nomProfil: function () { return PROFILS[profilActif].nom; },
+    setProfil: function (id) {
+      if (!PROFILS[id]) return;
+      profilActif = id;
+      etat = null;
+    },
+
     // Enregistre une réponse. q = question, indexChoisi = option touchée, ms = durée de réflexion.
     enregistrer: function (q, indexChoisi, serieCourante, ms) {
       var e = charge();
@@ -1827,7 +1842,7 @@ window.MM = window.MM || {};
   var racine = document.getElementById('app');
 
   // ---------- État de l'interface ----------
-  var ecran = 'entrainer';
+  var ecran = 'profil';   // on commence par le choix du profil
   var session = null;
   var question = null;
   var repondu = false;
@@ -1899,6 +1914,62 @@ window.MM = window.MM || {};
     else if (!chrono.debut) chrono.debut = Date.now();
   });
 
+
+  // ---------- Profils : avatars 2D (même style pour les deux) ----------
+  var AVATARS = {
+    lucas:
+      '<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+      '<path d="M16 124 C16 94 38 84 60 84 C82 84 104 94 104 124 Z" fill="#A60039"/>' +
+      '<rect x="51" y="72" width="18" height="16" rx="7" fill="#F1C9A5"/>' +
+      '<path d="M50 84 Q60 94 70 84" fill="#FAF5EA"/>' +
+      '<circle cx="35" cy="58" r="5" fill="#F1C9A5"/><circle cx="85" cy="58" r="5" fill="#F1C9A5"/>' +
+      '<ellipse cx="60" cy="56" rx="25" ry="27" fill="#F1C9A5"/>' +
+      '<path d="M34 54 C30 28 48 20 62 22 C80 22 91 36 86 54 C81 44 72 39 60 39 C49 39 40 44 34 54 Z" fill="#15110E"/>' +
+      '<path d="M54 24 C56 16 64 15 68 19 C63 19 60 21 58 25 Z" fill="#15110E"/>' +
+      '<circle cx="50" cy="58" r="2.8" fill="#15110E"/><circle cx="70" cy="58" r="2.8" fill="#15110E"/>' +
+      '<ellipse cx="43" cy="66" rx="5" ry="3" fill="#A60039" opacity=".22"/><ellipse cx="77" cy="66" rx="5" ry="3" fill="#A60039" opacity=".22"/>' +
+      '<path d="M53 68 Q60 75 67 68" fill="none" stroke="#15110E" stroke-width="2.4" stroke-linecap="round"/>' +
+      '</svg>',
+    elena:
+      '<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+      '<path d="M28 60 C26 22 94 22 92 60 L94 96 C94 106 80 106 78 94 L42 94 C40 106 26 106 26 96 Z" fill="#15110E"/>' +
+      '<path d="M16 124 C16 94 38 84 60 84 C82 84 104 94 104 124 Z" fill="#15110E"/>' +
+      '<rect x="51" y="72" width="18" height="16" rx="7" fill="#F1C9A5"/>' +
+      '<path d="M50 84 Q60 94 70 84" fill="#FAF5EA"/>' +
+      '<ellipse cx="60" cy="56" rx="25" ry="27" fill="#F1C9A5"/>' +
+      '<path d="M34 56 C30 28 48 20 62 22 C80 22 91 36 86 56 C80 46 70 38 56 37 C48 44 40 50 34 56 Z" fill="#15110E"/>' +
+      '<path d="M60 22 L50 12 C44 20 46 28 52 28 Z M60 22 L72 12 C78 20 74 28 68 28 Z" fill="#A60039"/><circle cx="60" cy="22" r="4.5" fill="#A60039"/>' +
+      '<circle cx="50" cy="58" r="2.8" fill="#15110E"/><circle cx="70" cy="58" r="2.8" fill="#15110E"/>' +
+      '<ellipse cx="43" cy="66" rx="5" ry="3" fill="#A60039" opacity=".22"/><ellipse cx="77" cy="66" rx="5" ry="3" fill="#A60039" opacity=".22"/>' +
+      '<path d="M53 68 Q60 75 67 68" fill="none" stroke="#15110E" stroke-width="2.4" stroke-linecap="round"/>' +
+      '</svg>'
+  };
+
+  function avatar(id, classe) {
+    var el = h('span', { class: classe || 'avatar' });
+    el.innerHTML = AVATARS[id];
+    return el;
+  }
+
+  function choisirProfil(id) {
+    MM.storage.setProfil(id);
+    aller('entrainer');
+  }
+
+  function vueProfil() {
+    var ids = ['lucas', 'elena'];
+    var ronds = ids.map(function (id) {
+      return h('button', { class: 'profil', onclick: function () { choisirProfil(id); } }, [
+        avatar(id, 'avatar'),
+        h('span', { class: 'profil-nom' }, MM.storage.profils[id].nom)
+      ]);
+    });
+    return h('div', { class: 'ecran-profil' }, [
+      h('div', { class: 'logo-profil' }, [h('span', { class: 'a' }, 'calcul'), h('span', { class: 'b' }, 'mental')]),
+      h('div', { class: 'profils' }, ronds)
+    ]);
+  }
+
   // ---------- Navigation ----------
   function aller(nom) {
     arreterChrono();
@@ -1909,7 +1980,8 @@ window.MM = window.MM || {};
 
   function afficher() {
     racine.innerHTML = '';
-    if (ecran === 'question') { racine.appendChild(vueQuestion()); demarrerChrono(); }
+    if (ecran === 'profil') { racine.appendChild(vueProfil()); }
+    else if (ecran === 'question') { racine.appendChild(vueQuestion()); demarrerChrono(); }
     else if (ecran === 'recap') { racine.appendChild(vueRecap()); racine.appendChild(barreOnglets()); }
     else if (ecran === 'stats') { racine.appendChild(vueStats()); racine.appendChild(barreOnglets()); }
     else { racine.appendChild(vueEntrainer()); racine.appendChild(barreOnglets()); }
@@ -1967,6 +2039,14 @@ window.MM = window.MM || {};
     else aller('entrainer');
   }
 
+  function chipProfil() {
+    return h('button', { class: 'chip-profil', onclick: function () { aller('profil'); } }, [
+      avatar(MM.storage.profil(), 'mini'),
+      h('span', { class: 'chip-nom' }, MM.storage.nomProfil()),
+      h('span', { class: 'chip-chg' }, 'Changer')
+    ]);
+  }
+
   // ---------- Écran "S'entraîner" ----------
   function vueEntrainer() {
     var niveauActuel = String(MM.storage.reglage('niveau', '1'));
@@ -1980,6 +2060,7 @@ window.MM = window.MM || {};
     }));
 
     var enfants = [
+      chipProfil(),
       h('h1', {}, 'Calcul mental'),
       h('p', { class: 'sous-titre' }, 'Cases conseil et finance. Chrono sur chaque question.'),
       h('div', { class: 'bloc-titre' }, 'Niveau'),
@@ -2143,6 +2224,7 @@ window.MM = window.MM || {};
 
     var faible = categorieLaPlusFaible();
     var enfants = [
+      chipProfil(),
       h('h1', {}, 'Stats'),
       h('p', { class: 'sous-titre' }, 'Meilleure série : ' + MM.storage.meilleureSerie()),
       h('table', { class: 'stats' }, [
@@ -2182,7 +2264,7 @@ window.MM = window.MM || {};
     // Réinitialisation avec confirmation dans l'interface (pas d'alert() natif).
     if (confirmerReset) {
       enfants.push(h('div', { class: 'confirmation' }, [
-        h('div', {}, 'Effacer toutes les statistiques ? Action définitive.'),
+        h('div', {}, 'Effacer toutes les statistiques de ' + MM.storage.nomProfil() + ' ? Action définitive.'),
         h('div', { class: 'rang' }, [
           h('button', { class: 'btn-large secondaire', onclick: function () { confirmerReset = false; afficher(); } }, 'Annuler'),
           h('button', { class: 'btn-large danger', onclick: function () { MM.storage.reinitialiser(); confirmerReset = false; afficher(); } }, 'Effacer')
